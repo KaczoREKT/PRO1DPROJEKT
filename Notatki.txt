@@ -1,0 +1,3 @@
+Dodaj różne inne modele klasyfikacyjne
+Dodać grafiki matplotlib dla każdego eksperymentu
+Podzielić program na funkcje żeby napisać ładny main
