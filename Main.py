@@ -20,7 +20,7 @@ def select_top_features(data):
     correlation_matrix = data.corr()
     correlation_with_outcome = correlation_matrix['Outcome'].abs().sort_values(ascending=False)
     top_features = correlation_with_outcome.index[1:11]  # Wybieramy 10 cech
-    print(f"Najbardziej skorelowane cechy z 'Outcome': {top_features.tolist()}")
+
 
     return top_features
 
@@ -36,6 +36,8 @@ def export_sets(data, top_features):
     # Normalizacja cech
     scaler = MinMaxScaler()
     X = scaler.fit_transform(X)
+
+    print(X)
 
     # Podział zbioru na treningowy i testowy
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
@@ -58,5 +60,6 @@ if __name__ == '__main__':
     data = importData(filename, columns)
     top_features = select_top_features(data)
     X_train, X_test, y_train, y_test = export_sets(data, top_features)
-    model = Tensorflow(X_train, y_train, X_test, y_test)
+    model = Tensorflow(X_train, X_test, y_train, y_test)
     model.buildModel()
+
