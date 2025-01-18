@@ -26,12 +26,11 @@ class Tensorflow:
                       loss='binary_crossentropy',  # Funkcja strat dla klasyfikacji binarnej
                       metrics=['accuracy']
                       )
-
         # Trenowanie modelu
         model.fit(self.X_train, self.y_train,
                   epochs=100,
                   batch_size=16,
-                  validation_data=(self.X_train, self.y_test),
+                  validation_data=(self.X_test, self.y_test),
                   verbose=1,
                   class_weight={0: 1, 1: 5})
 
