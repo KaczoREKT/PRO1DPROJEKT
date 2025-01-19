@@ -1,7 +1,9 @@
 import pandas as pd
+from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from Models.Tensorflow import Tensorflow
+
 
 
 # Importuje dane z dysku i zamienia dane na binarne
@@ -10,6 +12,8 @@ def importData(filename, columns):
 
     # Konwersja 'Outcome' na wartości binarne
     data['Outcome'] = data['Outcome'].map({'R': 1, 'N': 0})
+    # Zamienia wartości NaN na 0
+    data.fillna(0, inplace=True)
 
     return data
 
@@ -62,4 +66,5 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = export_sets(data, top_features)
     model = Tensorflow(X_train, X_test, y_train, y_test)
     model.buildModel()
+
 

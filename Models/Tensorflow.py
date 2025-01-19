@@ -3,8 +3,10 @@ from keras._tf_keras.keras.layers import Dense, Dropout
 from keras._tf_keras.keras.optimizers import Adam
 from sklearn.metrics import accuracy_score
 
+from Models.AbstractModel import AbstractModel
 
-class Tensorflow:
+
+class Tensorflow(AbstractModel):
     def __init__(self, X_train, X_test, y_train, y_test):
         self.X_train = X_train
         self.X_test = X_test
