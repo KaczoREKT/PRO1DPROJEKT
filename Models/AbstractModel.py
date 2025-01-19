@@ -7,6 +7,7 @@ class AbstractModel(ABC):
         self.X_test = X_test
         self.y_train = y_train
         self.y_test = y_test
+        self.model = None
 
     @abstractmethod
     def buildModel(self):
