@@ -1,4 +1,2 @@
 Dodaj różne inne modele klasyfikacyjne
 Dodać grafiki matplotlib dla każdego eksperymentu
-
-Opcjonalnie: Dodaj GUI

@@ -17,17 +17,21 @@ class Plots:
         plt.ylim(0, 1)
         for i, score in enumerate(scores):
             plt.text(i, score + 0.02, f"{score:.2f}", ha='center', fontsize=12)
+        plt.savefig('PlotsJPG/accuracies.png')
         plt.show()
 
     def plot_metrics(self, accuracies, classification_reports):
         x = np.arange(len(accuracies))
+        precision = []
+        recall = []
+        f1 = []
 
-        precision = [np.mean([v['precision'] for k, v in report.items() if isinstance(v, dict)]) for report in
-                     classification_reports.values()]
-        recall = [np.mean([v['recall'] for k, v in report.items() if isinstance(v, dict)]) for report in
-                  classification_reports.values()]
-        f1 = [np.mean([v['f1-score'] for k, v in report.items() if isinstance(v, dict)]) for report in
-              classification_reports.values()]
+        # Iterujemy przez raporty klasyfikacji dla każdego modelu
+        for report in classification_reports.values():
+            # Obliczamy średnią precyzję, recall i f1-score dla bieżącego modelu
+            precision.append(np.mean([v['precision'] for k, v in report.items() if isinstance(v, dict)]))
+            recall.append(np.mean([v['recall'] for k, v in report.items() if isinstance(v, dict)]))
+            f1.append(np.mean([v['f1-score'] for k, v in report.items() if isinstance(v, dict)]))
 
         width = 0.25
         plt.figure(figsize=(12, 6))
@@ -41,20 +45,23 @@ class Plots:
         plt.xticks(x, accuracies.keys(), fontsize=12)
         plt.legend()
         plt.ylim(0, 1)
+        plt.savefig('PlotsJPG/metrics.png')
         plt.show()
 
     def plot_confusion_matrix(self, model, X_test, y_test, title):
-        y_pred = model.predict(X_test)
-        cm = confusion_matrix(y_test, y_pred)
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
-        disp.plot(cmap='Blues')
+        y_pred = model.predict(X_test).astype(int)
+        ConfusionMatrixDisplay.from_predictions(y_test, y_pred, display_labels=['Class 0', 'Class 1'], cmap='Blues')
         plt.title(title)
+        plt.savefig(f'PlotsJPG/{title}.png')
         plt.show()
 
     def plot_roc_curve(self, models, X_test, y_test):
         plt.figure(figsize=(10, 6))
         for name, model in models.items():
-            y_pred_proba = model.predict_proba(X_test)[:, 1]
+            try:
+                y_pred_proba = model.predict_proba(X_test)[:, 1]
+            except AttributeError:
+                y_pred_proba = model.predict(X_test).ravel()
             fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
             roc_auc = auc(fpr, tpr)
             plt.plot(fpr, tpr, label=f'{name} (AUC = {roc_auc:.2f})')
@@ -64,4 +71,5 @@ class Plots:
         plt.xlabel('False Positive Rate', fontsize=14)
         plt.ylabel('True Positive Rate', fontsize=14)
         plt.legend()
+        plt.savefig('PlotsJPG/roc_curve.png')
         plt.show()
